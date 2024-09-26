@@ -6,39 +6,48 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <xpath expr="//sheet/group[@name='sale_header']" position="after">
-                            <group string="Empresa Cargadora">
-                                <field name="empresa_cargadora"/>
-                                <field name="conductor"/>
-                                <field name="matricula_vehiculo"/>
-                                <field name="matricula_semirremolque"/>
-                            </group>
-                            <group string="Empresa Expedidora">
-                                <field name="empresa_expedidora"/>
-                                <field name="operador_transporte"/>
-                            </group>
-                            <group string="Empresa Destinataria">
-                                <field name="empresa_destinataria"/>
-                                <field name="reservas_y_observaciones"/>
-                            </group>
-                            <group string="Carga de la Mercancía">
-                                <field name="lugar_carga"/>
-                                <field name="hora_llegada_carga"/>
-                                <field name="hora_salida_carga"/>
-                            </group>
-                            <group string="Entrega de la Mercancía">
-                                <field name="lugar_entrega"/>
-                                <field name="hora_llegada_entrega"/>
-                                <field name="hora_salida_entrega"/>
-                            </group>
-                            <group string="Descripción de la mercancía">
-                                <field name="descripcion_mercancia"/>
-                                <field name="peso"/><span>Tns.</span>
-                            </group>
-                            <group string="Datos Km">
-                                <field name="km_llegada"/>
-                                <field name="km_salida"/>
-                                <field name="km_total"/>
-                            </group>
+                    <group>
+                        <group string="Empresa Cargadora">
+                            <field name="empresa_cargadora"/>
+                            <field name="conductor"/>
+                            <field name="matricula_vehiculo"/>
+                            <field name="matricula_semirremolque"/>
+                        </group>
+                        <group string="Empresa Expedidora">
+                            <field name="empresa_expedidora"/>
+                            <field name="operador_transporte"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Empresa Destinataria">
+                            <field name="empresa_destinataria"/>
+                            <field name="reservas_y_observaciones"/>
+                        </group>
+                        <group string="Carga de la Mercancía">
+                            <field name="lugar_carga"/>
+                            <field name="hora_llegada_carga"/>
+                            <field name="hora_salida_carga"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Entrega de la Mercancía">
+                            <field name="lugar_entrega"/>
+                            <field name="hora_llegada_entrega"/>
+                            <field name="hora_salida_entrega"/>
+                        </group>
+                        <group string="Descripción de la mercancía">
+                            <field name="descripcion_mercancia"/>
+                            <field name="peso"/>
+                            <span>Tns.</span>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Datos Km">
+                            <field name="km_llegada"/>
+                            <field name="km_salida"/>
+                            <field name="km_total"/>
+                        </group>
+                    </group>
                 </xpath>
             </field>
         </record>
