@@ -48,6 +48,19 @@
                             <field name="km_total"/>
                         </group>
                     </group>
+                    <group>
+                        <group>
+                            <field name="firma_remitente" widget="signature"/>
+                            <field name="hora_firma_remitente"/>
+                        </group>
+                        <group>
+                            <field name="firma_transportista" widget="signature"/>
+                        </group>
+                        <group>
+                            <field name="firma_destinatario" widget="signature"/>
+                            <field name="hora_firma_destinatario"/>
+                        </group>
+                    </group>
                 </xpath>
             </field>
         </record>

@@ -67,7 +67,26 @@ class SaleOrder(models.Model):
     km_salida = fields.Float(
         string="Km. Salida"
     )
-    km_total = fields.Float(string="Total km", compute='_compute_km_total', store=True)
+    km_total = fields.Float(
+        string="Total km",
+        compute='_compute_km_total',
+        store=True
+    )
+    hora_firma_remitente = fields.Datetime(
+        string='Hora de Firma del Remitente'
+    )
+    hora_firma_destinatario = fields.Datetime(
+        string='Hora de Firma del Destinatario'
+    )
+    firma_remitente = fields.Binary(
+        'Firma del Remitente',
+    )
+    firma_destinatario = fields.Binary(
+        'Firma del Destinatario',
+    )
+    firma_transportista = fields.Binary(
+        'Firma del Transportista',
+    )
 
     @api.depends('km_llegada', 'km_salida')
     def _compute_km_total(self):
