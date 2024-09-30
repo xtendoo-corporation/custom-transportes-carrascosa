@@ -1,4 +1,5 @@
 from odoo import api, models, fields
+from datetime import datetime, timedelta
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -92,4 +93,14 @@ class SaleOrder(models.Model):
     def _compute_km_total(self):
         for order in self:
             order.km_total = order.km_llegada + order.km_salida
+
+    @api.onchange('firma_remitente')
+    def _onchange_firma_remitente(self):
+        if self.firma_remitente:
+            self.hora_firma_remitente = datetime.now()
+
+    @api.onchange('firma_destinatario')
+    def _onchange_firma_destinatario(self):
+        if self.firma_destinatario:
+            self.hora_firma_destinatario = datetime.now()
 

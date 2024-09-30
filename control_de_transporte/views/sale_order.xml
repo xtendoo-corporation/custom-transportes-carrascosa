@@ -48,19 +48,25 @@
                             <field name="km_total"/>
                         </group>
                     </group>
-                    <group>
+                </xpath>
+                 <xpath expr="//page[@name='other_information']" position="after">
+                    <page string="Firma Remitente" name="firma_remitente">
                         <group>
                             <field name="firma_remitente" widget="signature"/>
                             <field name="hora_firma_remitente"/>
                         </group>
+                    </page>
+                    <page string="Firma Transportista" name="firma_transportista">
                         <group>
                             <field name="firma_transportista" widget="signature"/>
                         </group>
+                    </page>
+                    <page string="Firma Destinatario" name="firma_destinatario">
                         <group>
                             <field name="firma_destinatario" widget="signature"/>
                             <field name="hora_firma_destinatario"/>
                         </group>
-                    </group>
+                    </page>
                 </xpath>
             </field>
         </record>
