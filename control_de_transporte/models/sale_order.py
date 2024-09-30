@@ -60,7 +60,7 @@ class SaleOrder(models.Model):
         string="Descripción"
     )
     peso = fields.Integer(
-        string="Peso aproximado"
+        string="Peso aproximado (Tns.)"
     )
     km_llegada = fields.Float(
         string="Km. LLegada"
