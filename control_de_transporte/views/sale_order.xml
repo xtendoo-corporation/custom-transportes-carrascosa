@@ -5,68 +5,24 @@
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
-                <xpath expr="//sheet/group[@name='sale_header']" position="after">
-                    <group>
-                        <group string="Empresa Cargadora">
-                            <field name="empresa_cargadora"/>
-                            <field name="conductor"/>
-                            <field name="matricula_vehiculo"/>
-                            <field name="matricula_semirremolque"/>
-                        </group>
-                        <group string="Empresa Expedidora">
-                            <field name="empresa_expedidora"/>
-                            <field name="operador_transporte"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group string="Empresa Destinataria">
-                            <field name="empresa_destinataria"/>
-                            <field name="reservas_y_observaciones"/>
-                        </group>
-                        <group string="Carga de la Mercancía">
-                            <field name="lugar_carga"/>
-                            <field name="hora_llegada_carga"/>
-                            <field name="hora_salida_carga"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group string="Entrega de la Mercancía">
-                            <field name="lugar_entrega"/>
-                            <field name="hora_llegada_entrega"/>
-                            <field name="hora_salida_entrega"/>
-                        </group>
-                        <group string="Descripción de la mercancía">
-                            <field name="descripcion_mercancia"/>
-                            <field name="peso"/>
-                        </group>
-                    </group>
-                    <group>
-                        <group string="Datos Km">
-                            <field name="km_llegada"/>
-                            <field name="km_salida"/>
-                            <field name="km_total"/>
-                        </group>
-                    </group>
+                <xpath expr="//button[@name='action_view_invoice']" position="before">
+                    <button name="action_view_transport_controls" type="object"
+                            class="oe_stat_button"
+                            icon="fa-file">
+                     <field name="transport_control_count" widget="statinfo" string="Controles de Transporte"/>
+                    </button>
                 </xpath>
-                 <xpath expr="//page[@name='other_information']" position="after">
-                    <page string="Firma Remitente" name="firma_remitente">
-                        <group>
-                            <field name="firma_remitente" widget="signature"/>
-                            <field name="hora_firma_remitente"/>
-                        </group>
-                    </page>
-                    <page string="Firma Transportista" name="firma_transportista">
-                        <group>
-                            <field name="firma_transportista" widget="signature"/>
-                        </group>
-                    </page>
-                    <page string="Firma Destinatario" name="firma_destinatario">
-                        <group>
-                            <field name="firma_destinatario" widget="signature"/>
-                            <field name="hora_firma_destinatario"/>
-                        </group>
-                    </page>
-                </xpath>
+            </field>
+        </record>
+
+        <record id="action_transport_control" model="ir.actions.act_window">
+            <field name="name">Controles de Transporte</field>
+            <field name="res_model">transport.control</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p>
+                    Aquí puedes ver y gestionar los controles de transporte relacionados con el pedido de venta.
+                </p>
             </field>
         </record>
     </data>

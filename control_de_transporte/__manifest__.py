@@ -10,7 +10,9 @@
     "license": "AGPL-3",
     "data": [
         "views/sale_order.xml",
+        "views/transport_control.xml",
         "security/ir.model.access.csv",
+        'reports/transport_control_report.xml',
     ],
     "installable": True,
 }

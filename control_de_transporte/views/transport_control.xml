@@ -1,0 +1,397 @@
+<odoo>
+    <record id="action_transport_control_report" model="ir.actions.report">
+        <field name="name">Control de Transporte</field>
+        <field name="model">transport.control</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">control_de_transporte.report_transport_control_template</field>
+        <field name="report_file">control_de_transporte.report_transport_control_template</field>
+        <field name="binding_type">report</field>
+        <field name="binding_model_id" ref="model_transport_control"/>
+    </record>
+
+    <record id="view_transport_control_form" model="ir.ui.view">
+        <field name="name">transport.control.form</field>
+        <field name="model">transport.control</field>
+        <field name="arch" type="xml">
+            <form string="Transport Control">
+                <header>
+                    <button name="%(action_transport_control_report)d" type="action" string="Imprimir"
+                            class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Empresa Cargadora">
+                            <field name="empresa_cargadora"/>
+                            <field name="conductor"/>
+                            <field name="matricula_vehiculo"/>
+                            <field name="matricula_semirremolque"/>
+                        </group>
+                        <group string="Empresa Expedidora">
+                            <field name="empresa_expedidora"/>
+                            <field name="operador_transporte"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Empresa Destinataria">
+                            <field name="empresa_destinataria"/>
+                            <field name="reservas_y_observaciones"/>
+                        </group>
+                        <group string="Carga de la Mercancía">
+                            <field name="lugar_carga"/>
+                            <field name="hora_llegada_carga"/>
+                            <field name="hora_salida_carga"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Entrega de la Mercancía">
+                            <field name="lugar_entrega"/>
+                            <field name="hora_llegada_entrega"/>
+                            <field name="hora_salida_entrega"/>
+                        </group>
+                        <group string="Descripción de la mercancía">
+                            <field name="descripcion_mercancia"/>
+                            <field name="peso"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Datos Km">
+                            <field name="km_llegada"/>
+                            <field name="km_salida"/>
+                            <field name="km_total"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Firma Remitente">
+                            <group>
+                                <field name="firma_remitente" widget="signature"/>
+                                <field name="hora_firma_remitente" invisible="1"/>
+                                <field name="dni_remitente" placeholder="DNI"/>
+                                <field name="nombre_remitente" placeholder="Nombre"/>
+                            </group>
+                        </page>
+                        <page string="Firma Transportista">
+                            <group>
+                                <field name="firma_transportista" widget="signature"/>
+                                <field name="dni_transportista" placeholder="DNI"/>
+                                <field name="nombre_transportista" placeholder="Nombre"/>
+                            </group>
+                        </page>
+                        <page string="Firma Destinatario">
+                            <group>
+                                <field name="firma_destinatario" widget="signature"/>
+                                <field name="hora_firma_destinatario" invisible="1"/>
+                                <field name="dni_destinatario" placeholder="DNI"/>
+                                <field name="nombre_destinatario" placeholder="Nombre"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_transport_control_tree" model="ir.ui.view">
+        <field name="name">transport.control.tree</field>
+        <field name="model">transport.control</field>
+        <field name="arch" type="xml">
+            <tree string="Transport Controls">
+                <field name="empresa_cargadora"/>
+                <field name="conductor"/>
+                <field name="matricula_vehiculo"/>
+                <field name="empresa_expedidora"/>
+                <field name="empresa_destinataria"/>
+                <field name="lugar_carga"/>
+                <field name="hora_llegada_carga"/>
+                <field name="lugar_entrega"/>
+                <field name="hora_llegada_entrega"/>
+                <field name="km_total"/>
+            </tree>
+        </field>
+    </record>
+
+    <template id="report_transport_control_template">
+        <t t-call="web.html_container">
+
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <style>
+                        .table.table-bordered td {
+                        background-color: transparent !important;
+                        font-weight: normal;
+                        }
+
+                        .table.table-bordered {
+                        background-color: transparent !important;
+                        font-weight: normal;
+                        }
+
+                         .table.table-bordered th {
+                        font-weight: normal;
+                    }
+                    </style>
+                    <t t-foreach="docs" t-as="doc">
+                        <table class="table table-bordered">
+                            <tr>
+                                <td colspan="3" style="text-align: left;max-width: 225px;">
+                                    <strong style="color: #000000;">Empresa Cargadora:</strong>
+                                    <br/>
+                                    <span t-field="doc.empresa_cargadora.name" style="color: #000000;"/>
+                                    <br/>
+                                    <span t-field="doc.empresa_cargadora.street" style="color: #000000;"/>
+                                    <t t-if="doc.empresa_cargadora.street2">
+                                        <span>,</span>
+                                        <span t-field="doc.empresa_cargadora.street2" style="color: #000000;"/>
+                                    </t>
+                                    <t t-if="doc.empresa_cargadora.city">
+                                        <span>,</span>
+                                        <span t-field="doc.empresa_cargadora.city" style="color: #000000;"/>
+                                    </t>
+                                    <t t-if="doc.empresa_cargadora.country_id">
+                                        <span>,</span>
+                                        <span t-field="doc.empresa_cargadora.country_id" style="color: #000000;"/>
+                                    </t>
+                                </td>
+
+                                <td colspan="3" style="text-align: left;max-width: 225px;" >
+                                    <strong>Conductor:</strong>
+                                    <span t-field="doc.conductor.name"/>
+                                    <br/>
+                                    <strong>Matrícula Vehículo:</strong>
+                                    <span t-field="doc.matricula_vehiculo"/>
+                                    <br/>
+                                    <strong>Matrícula Semirremolque:</strong>
+                                    <span t-field="doc.matricula_semirremolque"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="text-align: left;">
+                                    <strong style="color: #000000;">Empresa Expedidora:</strong>
+                                    <br/>
+                                    <span t-field="doc.empresa_expedidora.name" style="color: #000000;"/>
+                                    <br/>
+                                    <span t-field="doc.empresa_expedidora.street" style="color: #000000;"/>
+                                    <t t-if="doc.empresa_expedidora.street2" >
+                                        <span>,</span>
+                                        <span t-field="doc.empresa_expedidora.street2" style="color: #000000;"/>
+                                    </t>
+                                    <t t-if="doc.empresa_expedidora.city">
+                                        <span>,</span>
+                                        <span t-field="doc.empresa_expedidora.city" style="color: #000000;"/>
+                                    </t>
+                                    <t t-if="doc.empresa_expedidora.country_id">
+                                        <span>,</span>
+                                        <span t-field="doc.empresa_expedidora.country_id" style="color: #000000;"/>
+                                    </t>
+                                </td>
+
+                                <td colspan="3" style="text-align: left; font-weight: normal;">
+                                    <strong>Operador de Transporte:</strong>
+                                    <br/>
+                                    <span t-field="doc.operador_transporte.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="text-align: left;">
+                                    <strong style="color: #000000;">Empresa Destinataria:</strong>
+                                    <br/>
+                                    <span t-field="doc.empresa_destinataria.name" style="color: #000000;"/>
+                                    <br/>
+                                    <span t-field="doc.empresa_destinataria.street" style="color: #000000;"/>
+                                    <t t-if="doc.empresa_destinataria.street2">
+                                        <span>,</span>
+                                        <span t-field="doc.empresa_destinataria.street2" style="color: #000000;"/>
+                                    </t>
+                                    <t t-if="doc.empresa_destinataria.city">
+                                        <span>,</span>
+                                        <span t-field="doc.empresa_destinataria.city" style="color: #000000;"/>
+                                    </t>
+                                    <t t-if="doc.empresa_destinataria.country_id">
+                                        <span>,</span>
+                                        <span t-field="doc.empresa_destinataria.country_id" style="color: #000000;"/>
+                                    </t>
+                                </td>
+
+                                <td colspan="3" style="text-align: left; font-weight: normal;">
+                                    <strong>Reservas y Observaciones:</strong>
+                                    <br/>
+                                    <span t-field="doc.reservas_y_observaciones"/>
+                                </td>
+                            </tr>
+                            <td colspan="3" style="text-align: left;">
+                                <strong style="color: #000000;">Lugar de carga de la mercancía:</strong>
+                                <br/>
+                                <span t-field="doc.lugar_carga" style="color: #000000;"/>
+                            </td>
+                            <td colspan="3" style="text-align: left; font-weight: normal;">
+                                <strong>Lugar de entrega de la mercancía:</strong>
+                                <br/>
+                                <span t-field="doc.lugar_entrega"/>
+                            </td>
+                            <tr>
+                                <td colspan="3" style="text-align: left;">
+                                    <strong style="color: #000000;">Hora de Llegada Carga:</strong>
+                                    <span t-field="doc.hora_llegada_carga" style="color: #000000;"/>
+                                    <br/>
+                                    <strong style="color: #000000;">Hora de Salida Carga:</strong>
+                                    <span t-field="doc.hora_salida_carga" style="color: #000000;"/>
+                                </td>
+
+                                <!-- Cuadro 8: Hora de Llegada y Salida Entrega -->
+                                <td colspan="3" style="text-align: left; font-weight: normal;">
+                                    <strong>Hora de Llegada Entrega:</strong>
+                                    <span t-field="doc.hora_llegada_entrega"/>
+                                    <br/>
+                                    <strong>Hora de Salida Entrega:</strong>
+                                    <span t-field="doc.hora_salida_entrega"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <!-- Cuadro 9: Descripción y Peso -->
+                                <td colspan="3" style="text-align: left;">
+                                    <strong style="color: #000000;">Descripción de la Mercancía:</strong>
+                                    <span t-field="doc.descripcion_mercancia" style="color: #000000;"/>
+                                    <br/>
+                                    <strong style="color: #000000;">Peso:</strong>
+                                    <span t-field="doc.peso" style="color: #000000;"/>
+                                    <span style="color: #000000;">Tns.</span>
+                                </td>
+
+                                <!-- Cuadro 10: Kilómetros -->
+                                <td colspan="3" style="text-align: left; font-weight: normal;">
+                                    <strong>Kilómetros:</strong>
+                                    <br/>
+                                    <strong>Km. de Llegada:</strong>
+                                    <span t-field="doc.km_llegada"/>
+                                    <br/>
+                                    <strong>Km. de Salida:</strong>
+                                    <span t-field="doc.km_salida"/>
+                                    <br/>
+                                    <strong>Total Km:</strong>
+                                    <span t-field="doc.km_total"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <!-- Cuadro 11: Firmas -->
+                                <td colspan="2" style="text-align: left;">
+                                    <strong style="color: #000000;">Firma del Remitente:</strong>
+                                    <br/>
+                                    <t t-if="doc.firma_remitente">
+                                        <img t-att-src="'data:image/png;base64,' + doc.firma_remitente.decode('utf-8')"
+                                             style="max-width: 250px;"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-if="doc.dni_remitente">
+                                            <span style="color: #000000;">
+                                                <t t-esc="doc.dni_remitente"/>
+                                            </span>
+                                        </t>
+                                        <t t-else="">
+                                            <span style="color: #000000;">
+                                                <t t-esc="doc.nombre_remitente"/>
+                                            </span>
+                                        </t>
+                                    </t>
+                                    <br/>
+                                    <strong style="color: #000000;">Hora de Firma:</strong>
+                                    <br/>
+                                    <span t-field="doc.hora_firma_remitente" style="color: #000000;"/>
+                                </td>
+                                <td colspan="2" style="text-align: left;">
+                                    <strong style="color: #000000;">Firma del Transportista:</strong>
+                                    <br/>
+                                    <t t-if="doc.firma_transportista">
+                                        <img
+                                            t-att-src="'data:image/png;base64,' + doc.firma_transportista.decode('utf-8')"
+                                            style="max-width: 250px;"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-if="doc.dni_transportista">
+                                            <span>
+                                                <t t-esc="doc.dni_transportista" style="color: #000000;"/>
+                                            </span>
+                                        </t>
+                                        <t t-else="">
+                                            <span style="color: #000000;">
+                                                <t t-esc="doc.nombre_transportista" style="color: #000000;"/>
+                                            </span>
+                                        </t>
+                                    </t>
+                                </td>
+                                <td colspan="2" style="text-align: left;">
+                                    <strong>Firma del Destinatario:</strong>
+                                    <br/>
+                                    <t t-if="doc.firma_destinatario">
+                                        <img
+                                            t-att-src="'data:image/png;base64,' + doc.firma_destinatario.decode('utf-8')"
+                                            style="max-width: 250px;"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-if="doc.dni_destinatario">
+                                            <span>
+                                                <t t-esc="doc.dni_destinatario"/>
+                                            </span>
+                                        </t>
+                                        <t t-else="">
+                                            <span>
+                                                <t t-esc="doc.nombre_destinatario"/>
+                                            </span>
+                                        </t>
+                                    </t>
+                                    <br/>
+                                    <strong>Hora de Firma:</strong>
+                                    <br/>
+                                    <span t-field="doc.hora_firma_destinatario"/>
+                                </td>
+                            </tr>
+                        </table>
+                        <span style="font-size: 12px;">
+                            &#160;&#160;&#160;<b>1.-</b>
+                            Las condiciones del presente documento se regirán por lo dispuesto en la Ley 16/1987 de
+                            Ordenación de los Transportes Terrestres,
+                            su Reglamento, La Ley 15/2009, de 11 noviembre, del contrato de transporte terrestre de
+                            mercancías y la Orden FOM/1882/2012, de 1 de Agosto,
+                            por el que se aprueban las condiciones generales de contratación de los transportes de
+                            mercancías por carretera.
+                            <br/>
+                            &#160;&#160;&#160;<b>2.-</b>
+                            Los límites de la indemnización por responsabilidad del porteador quedan fijados de
+                            conformidad
+                            con los criterios marcados en el art.57
+                            de la Ley del contrato de transporte terrestres de mercancías.
+                            Se faculta al cargador, previo pago del correspondiente suplemento y acuerdo expreso con el
+                            porteador, a declarar un valor de la mercancía superior
+                            al pactado en el límite de responsabilidad.
+                            <br/>
+                            &#160;&#160;&#160;<b>3.-</b>
+                            De acuerdo con el art.20 de la Ley del contrato de transporte terrestre de mercancías, las
+                            operaciones de carga de las mercancías a bordo
+                            de los vehículos, así como la descarga de estos, serán por cuenta, respectivamente del
+                            cargador
+                            y del destinatario. Igual régimen será de aplicación
+                            respecto de la estiba y desestiba de las mercancías.
+                        </span>
+
+                        <div name="final_text" style="border-style:solid; border-color:#000000; border-width:2px;">
+                            <h6>
+                                <b>DOCUMENTO DE CONTROL DE TRANSPORTE DE MERCANCÍAS POR CARRETERA.</b>
+                                EL PRESENTE DOCUMENTO DE CONTROL ESTÁ ELABORADO DE CONFORMIDAD A LA <b>ORDEN
+                                FOM/238/2003 DEL 31 DE ENERO,</b>POR LO QUE SE ESTABLECEN NORMAS EN RELACIÓN CON LOS
+                                TRANSPORTE PÚBLICOS DE MERCANCÍAS POR CARRETERA
+                            </h6>
+                        </div>
+                    </t>
+                </div>
+
+            </t>
+        </t>
+    </template>
+</odoo>

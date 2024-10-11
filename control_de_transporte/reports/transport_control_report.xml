@@ -1,0 +1,10 @@
+<odoo>
+    <report
+        id="report_transport_control"
+        model="transport.control"
+        string="Control de Transporte"
+        report_type="qweb-pdf"
+        name="control_de_transporte.report_transport_control_template"
+        file="control_de_transporte.report_transport_control_template"
+    />
+</odoo>

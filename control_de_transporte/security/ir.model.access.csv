@@ -1,1 +1,2 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+control_de_transporte.access_transport_control,access_transport_control,control_de_transporte.model_transport_control,base.group_user,1,1,1,1
