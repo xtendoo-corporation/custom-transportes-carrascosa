@@ -6,13 +6,14 @@
     "company": "Xtendoo",
     "website": "http://www.xtendoo.es",
     "category": "Sales",
-    "depends": ["sale"],
+    "depends": ["sale","mail"],
     "license": "AGPL-3",
     "data": [
         "views/sale_order.xml",
         "views/transport_control.xml",
         "security/ir.model.access.csv",
         'reports/transport_control_report.xml',
+        "data/mail_template_data.xml"
     ],
     "installable": True,
 }

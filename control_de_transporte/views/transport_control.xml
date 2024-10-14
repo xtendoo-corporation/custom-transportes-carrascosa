@@ -17,6 +17,9 @@
                 <header>
                     <button name="%(action_transport_control_report)d" type="action" string="Imprimir"
                             class="btn-primary"/>
+                    <button name="action_send_report_email" type="object" string="Enviar por Correo"
+                            class="btn-primary"/>
+                    <button name="action_view_report_pdf" type="object" string="Ver PDF" class="btn-secondary"/>
                 </header>
                 <sheet>
                     <group>
@@ -61,6 +64,13 @@
                             <field name="km_llegada"/>
                             <field name="km_salida"/>
                             <field name="km_total"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Código QR">
+                            <field name="qr_code" widget="image" class="oe_avatar"
+                                   options="{'no_open': True, 'alt': 'Código QR'}"/>
                         </group>
                     </group>
 
@@ -134,9 +144,9 @@
                         font-weight: normal;
                         }
 
-                         .table.table-bordered th {
+                        .table.table-bordered th {
                         font-weight: normal;
-                    }
+                        }
                     </style>
                     <t t-foreach="docs" t-as="doc">
                         <table class="table table-bordered">
@@ -161,7 +171,7 @@
                                     </t>
                                 </td>
 
-                                <td colspan="3" style="text-align: left;max-width: 225px;" >
+                                <td colspan="3" style="text-align: left;max-width: 225px;">
                                     <strong>Conductor:</strong>
                                     <span t-field="doc.conductor.name"/>
                                     <br/>
@@ -179,7 +189,7 @@
                                     <span t-field="doc.empresa_expedidora.name" style="color: #000000;"/>
                                     <br/>
                                     <span t-field="doc.empresa_expedidora.street" style="color: #000000;"/>
-                                    <t t-if="doc.empresa_expedidora.street2" >
+                                    <t t-if="doc.empresa_expedidora.street2">
                                         <span>,</span>
                                         <span t-field="doc.empresa_expedidora.street2" style="color: #000000;"/>
                                     </t>

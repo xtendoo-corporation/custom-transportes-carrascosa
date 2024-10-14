@@ -1,5 +1,10 @@
 from odoo import api, models, fields
 from datetime import datetime, timedelta
+from odoo import _
+import qrcode
+import base64
+import io
+
 
 class TransportControl(models.Model):
     _name = 'transport.control'
@@ -139,6 +144,10 @@ class TransportControl(models.Model):
         "Nombre del Transportista",
         tracking=True
     )
+    qr_code = fields.Binary(
+        string="Código QR",
+        readonly=True
+    )
 
     @api.depends('km_llegada', 'km_salida')
     def _compute_km_total(self):
@@ -155,5 +164,93 @@ class TransportControl(models.Model):
         if self.firma_destinatario:
             self.hora_firma_destinatario = datetime.now()
 
+    def action_send_report_email(self):
+        self.ensure_one()
 
+        template = self.env.ref('control_de_transporte.email_template_transport_control', False)
+        if not template:
+            raise ValueError("La plantilla de correo no existe")
+
+        compose_form = self.env.ref("mail.email_compose_message_wizard_form", False)
+        ctx = dict(
+            default_model="transport.control",
+            default_res_ids=[self.id],
+            default_use_template=bool(template),
+            default_template_id=template.id if template else False,
+            default_composition_mode="comment",
+            user_id=self.env.user.id,
+        )
+
+        return {
+            "name": _("Enviar Correo Electrónico"),
+            "type": "ir.actions.act_window",
+            "view_type": "form",
+            "view_mode": "form",
+            "res_model": "mail.compose.message",
+            "views": [(compose_form.id, "form")],
+            "view_id": compose_form.id,
+            "target": "new",
+            "context": ctx,
+        }
+
+    def _get_pdf_report(self):
+        report_action = self.env.ref('control_de_transporte.action_transport_control_report')
+        pdf, _ = report_action.sudo()._render_qweb_pdf([self.id])
+        return pdf
+
+    def action_view_report_pdf(self):
+        self.ensure_one()
+        report_url = self.get_report_url()
+        self.generate_qr_code(report_url)
+        return {
+            'type': 'ir.actions.act_url',
+            'url': report_url,
+            'target': 'new',
+        }
+
+    def get_report_url(self):
+        base_url = self.env['ir.config_parameter'].sudo().get_param('web.base.url')
+        report_name = 'control_de_transporte.report_transport_control_template'
+        return f"{base_url}/report/pdf/{report_name}/{self.id}"
+
+    def generate_qr_code(self, data):
+        """Genera un código QR y lo almacena en el campo qr_code."""
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(data)
+        qr.make(fit=True)
+
+        img = qr.make_image(fill_color="black", back_color="white")
+        img_byte_arr = io.BytesIO()
+        img.save(img_byte_arr, format='PNG')
+        img_byte_arr.seek(0)
+        self.qr_code = base64.b64encode(img_byte_arr.read())
+
+    @api.model
+    def create(self, vals):
+        record = super(TransportControl, self).create(vals)
+        report_url = record.get_report_url()
+        record.generate_qr_code(report_url)
+        return record
+
+    @api.onchange(
+        'sale_order_id', 'empresa_cargadora', 'conductor', 'matricula_vehiculo',
+        'matricula_semirremolque', 'empresa_expedidora', 'operador_transporte',
+        'empresa_destinataria', 'reservas_y_observaciones', 'lugar_carga',
+        'hora_llegada_carga', 'hora_salida_carga', 'lugar_entrega',
+        'hora_llegada_entrega', 'hora_salida_entrega', 'descripcion_mercancia',
+        'peso', 'km_llegada', 'km_salida', 'hora_firma_remitente',
+        'hora_firma_destinatario', 'firma_remitente', 'dni_remitente',
+        'nombre_remitente', 'firma_destinatario', 'dni_destinatario',
+        'nombre_destinatario', 'firma_transportista', 'dni_transportista',
+        'nombre_transportista'
+    )
+    def _onchange_fields_update(self):
+        for record in self:
+            report_url = record.get_report_url()
+            record.generate_qr_code(report_url)
 

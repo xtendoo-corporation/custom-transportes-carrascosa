@@ -1,0 +1,21 @@
+<odoo>
+    <data>
+        <record id="email_template_transport_control" model="mail.template">
+            <field name="name">Correo Control de Transporte</field>
+            <field name="model_id" ref="model_transport_control"/>
+            <field name="subject">Informe de Control de Transporte</field>
+            <field name="email_from">${(user.email or '')|safe}</field>
+            <field name="email_to">${object.partner_id.email|safe}</field>
+            <field name="body_html">
+                <![CDATA[
+        <p>Estimado/a,</p>
+        <p>Adjunto encontrará el informe de Control de Transporte.</p>
+        <p>Saludos,</p>
+        ]]>
+            </field>
+            <field name="report_template_ids"
+                   eval="[(4, ref('control_de_transporte.action_transport_control_report'))]"/>
+        </record>
+    </data>
+</odoo>
+
